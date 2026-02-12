@@ -40,12 +40,16 @@ public class FruitTransaction {
         }
 
         public static Operation getByCode(String code) {
-            for (Operation op : Operation.values()) {
-                if (op.getCode().equals(code)) {
+            if (code == null) {
+                throw new IllegalArgumentException("Operation code cannot be null");
+            }
+            for (Operation op : values()) {
+                if (op.code.equals(code.trim())) {
                     return op;
                 }
             }
-            throw new RuntimeException("Unknown operation code: " + code);
+            throw new IllegalArgumentException("Unknown operation code: "
+                    + code);
         }
     }
 }

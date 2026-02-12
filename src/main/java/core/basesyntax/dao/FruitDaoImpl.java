@@ -1,26 +1,39 @@
 package core.basesyntax.dao;
 
 import core.basesyntax.db.Storage;
-import java.util.HashMap;
 import java.util.Map;
 
 public class FruitDaoImpl implements FruitDao {
 
     @Override
     public void add(String fruit, int quantity) {
-        int currentQuantity = Storage.getFruits().getOrDefault(fruit, 0);
-        Storage.getFruits().put(fruit, currentQuantity + quantity);
+        if (fruit == null || fruit.isBlank()) {
+            throw new RuntimeException("Fruit name cannot be null or empty");
+        }
 
-    }
+        int currentBalance = getQuantity(fruit);
+        int newBalance = currentBalance + quantity;
 
-    @Override
-    public Map<String, Integer> getAllFruits() {
-        return new HashMap<>(Storage.getFruits());
+        if (newBalance < 0) {
+            throw new RuntimeException("Balance can't be negative for: " + fruit);
+        }
+
+        Storage.update(fruit, newBalance);
     }
 
     @Override
     public Integer getQuantity(String fruit) {
-        return Storage.getFruits().get(fruit);
+        // Додамо перевірку входу, як просив рев'юер
+        if (fruit == null || fruit.isBlank()) {
+            throw new RuntimeException("Fruit name cannot be null or empty");
+        }
+        Integer quantity = Storage.get(fruit);
+        return (quantity == null) ? 0 : quantity;
     }
 
+    @Override
+    public Map<String, Integer> getAllFruits() {
+
+        return Storage.getAll();
+    }
 }
