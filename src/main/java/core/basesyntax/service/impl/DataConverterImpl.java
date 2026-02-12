@@ -36,10 +36,12 @@ public class DataConverterImpl implements DataConverter {
                     throw new RuntimeException("Operation or fruit name is empty at row " + i);
                 }
 
-                FruitTransaction.Operation operation = FruitTransaction.Operation.getByCode(operationCode);
+                FruitTransaction.Operation operation = FruitTransaction.Operation
+                        .getByCode(operationCode);
                 int quantity = Integer.parseInt(quantityStr);
                 if (quantity < 0) {
-                    throw new RuntimeException("Quantity cannot be negative at row " + i + ": " + quantity);
+                    throw new RuntimeException("Quantity cannot be negative at row "
+                            + i + ": " + quantity);
                 }
 
                 transactions.add(new FruitTransaction(operation, fruit, quantity));
