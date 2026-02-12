@@ -13,6 +13,12 @@ public class PurchaseOperationHandler implements OperationHandler {
 
     @Override
     public void handle(FruitTransaction transaction) {
+        Integer currentBalance = fruitDao.getQuantity(transaction.getFruit());
+
+        if (currentBalance == null || currentBalance < transaction.getQuantity()) {
+            throw new RuntimeException("Balance can't be negative");
+        }
+
         fruitDao.add(transaction.getFruit(), -transaction.getQuantity());
 
     }
